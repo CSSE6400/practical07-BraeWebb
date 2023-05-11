@@ -2,8 +2,12 @@
 
 cd ecr && terraform init && terraform apply -auto-approve && cd ..
 
-docker build -t $(cat ecr/ecr.txt) .
-docker push $(cat ecr/ecr.txt)
+url=$(cat ecr/ecr.txt)
+
+cat ecr/creds.txt | docker login --username AWS --password-stdin $(cat ecr/endpoint.txt)
+
+docker build -t $url .
+docker push $url
 
 terraform init
 terraform apply -auto-approve
